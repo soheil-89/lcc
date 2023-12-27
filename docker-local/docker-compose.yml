@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  lcc_nginx:
+    hostname: lcc_nginx
+    container_name: lcc_nginx
+    build:
+      context: ..
+      dockerfile: ./docker-local/nginx/Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ../src:/var/www/html
+#      - ../../../volumes/web/logs:/var/log/nginx
+      - ./nginx/conf/site.conf:/etc/nginx/conf.d/site.conf
+  lcc_php:
+    hostname: lcc_php
+    container_name: lcc_php
+    build:
+      context: ..
+      dockerfile: ./docker-local/php/Dockerfile
+    volumes:
+      - ../src:/var/www/html
+      - ./php/conf/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./php/conf/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./php/conf/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    environment:
+      PHP_IDE_CONFIG: "serverName=local"
+  lcc_mysql:
+    build:
+      context: ..
+      dockerfile: ./docker-local/mysql/Dockerfile
+    command: --default-authentication-plugin=mysql_native_password --plugin-load-add=ha_federated
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lcc
+      MYSQL_USER: lcc
+      MYSQL_PASSWORD: lcc
+    volumes:
+      - ../data/mysql:/var/lib/mysql
+  lcc_adminer:
+      image: adminer
+      ports:
+        - "8080:8080"
