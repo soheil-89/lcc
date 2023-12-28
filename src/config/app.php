@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -168,6 +168,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\FilterManagerServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class
     ])->toArray(),
 
     /*
@@ -183,6 +185,11 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'FilterManagerFacade' => App\Facades\FilterManagerFacade::class,
     ])->toArray(),
 
+
+
+    'admin_mobile' => env("ADMIN_MOBILE",'0910000000'),
+    'admin_email' => env("ADMIN_EMAIL",'admin@lendo.ir')
 ];
